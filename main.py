@@ -17,6 +17,7 @@ Screen height: {SCREEN_HEIGHT}""")
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
+        playerchar.update(dt)
         playerchar.draw(screen)
         pygame.display.flip()
         pygame.time.Clock().tick(60)
