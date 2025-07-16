@@ -1,15 +1,19 @@
 from constants import *
+import random
 from asteroidfield import AsteroidField
 from asteroid import Asteroid
 from player import *
 import pygame
 
+#SUPERDOOPERMEGAULTRARAINBOWMODE!!!!!
+rainbowmode = False
 
 def main():
     pygame.init
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    colourlist = ("white", "green", "blue", "yellow", "red", "pink", "brown")
     AsteroidField.containers = (updatable)
     Asteroid.containers = (drawable, asteroids, updatable)
     Player.containers = (updatable, drawable)
@@ -19,13 +23,17 @@ def main():
 Screen height: {SCREEN_HEIGHT}""")
     playerchar = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
     field = AsteroidField()
+    print("Asteroids successfully started!")
 
     #game loop
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        screen.fill("black")
+        if rainbowmode == True:
+            screen.fill(random.choice(colourlist))
+        else:
+            screen.fill("black")
         updatable.update(dt)
         for drawble in drawable:
             drawble.draw(screen)
