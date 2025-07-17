@@ -43,6 +43,10 @@ Screen height: {SCREEN_HEIGHT}""")
             if asteroid.collisioncheck(playerchar) == True:
                 print("Game over!")
                 run = False
+            for bullet in shots:
+                if asteroid.collisioncheck(bullet) == True:
+                    asteroid.kill()
+                    bullet.kill()
                 
         for drawble in drawable:
             drawble.draw(screen)
