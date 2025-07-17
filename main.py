@@ -45,7 +45,7 @@ Screen height: {SCREEN_HEIGHT}""")
                 run = False
             for bullet in shots:
                 if asteroid.collisioncheck(bullet) == True:
-                    asteroid.kill()
+                    asteroid.split()
                     bullet.kill()
                 
         for drawble in drawable:
@@ -54,7 +54,6 @@ Screen height: {SCREEN_HEIGHT}""")
         pygame.time.Clock().tick(60)
         frame = pygame.time.Clock().tick(60)
         dt = frame / 1000
-
 
 
 if __name__ == "__main__":
