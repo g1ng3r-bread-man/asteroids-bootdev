@@ -3,6 +3,7 @@ import random
 from asteroidfield import AsteroidField
 from asteroid import Asteroid
 from player import *
+from shots import Shot
 import pygame
 
 #SUPERDOOPERMEGAULTRARAINBOWMODE!!!!!
@@ -13,11 +14,12 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
     colourlist = ("white", "green", "blue", "yellow", "red", "pink", "brown")
     AsteroidField.containers = (updatable)
     Asteroid.containers = (drawable, asteroids, updatable)
     Player.containers = (updatable, drawable)
-    
+    Shot.containers = (drawable, updatable, shots)
     dt = 0
     print("Starting Asteroids!")
     print(f"""Screen width: {SCREEN_WIDTH}
