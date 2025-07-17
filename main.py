@@ -17,6 +17,7 @@ def main():
     AsteroidField.containers = (updatable)
     Asteroid.containers = (drawable, asteroids, updatable)
     Player.containers = (updatable, drawable)
+    
     dt = 0
     print("Starting Asteroids!")
     print(f"""Screen width: {SCREEN_WIDTH}
@@ -26,7 +27,8 @@ Screen height: {SCREEN_HEIGHT}""")
     print("Asteroids successfully started!")
 
     #game loop
-    while True:
+    run = True
+    while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -35,6 +37,11 @@ Screen height: {SCREEN_HEIGHT}""")
         else:
             screen.fill("black")
         updatable.update(dt)
+        for asteroid in asteroids:
+            if asteroid.collisioncheck(playerchar) == True:
+                print("Game over!")
+                run = False
+                
         for drawble in drawable:
             drawble.draw(screen)
         pygame.display.flip()
