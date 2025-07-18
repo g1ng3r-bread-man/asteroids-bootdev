@@ -6,8 +6,6 @@ from player import *
 from shots import Shot
 import pygame
 
-#SUPERDOOPERMEGAULTRARAINBOWMODE!!!!!
-rainbowmode = False
 
 def main():
     pygame.init
@@ -34,7 +32,7 @@ Screen height: {SCREEN_HEIGHT}""")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        if rainbowmode == True:
+        if playerchar.rainbowmode == True:
             screen.fill(random.choice(colourlist))
         else:
             screen.fill("black")

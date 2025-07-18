@@ -8,6 +8,8 @@ class Player(CircleShape):
         self.rotation = 0
         self.containers = ()
         self.shotcooldown = 0
+        #SUPERDOOPERMEGAULTRARAINBOWMODE!!!!!
+        self.rainbowmode = False
 
         # in the player class
     def triangle(self):
@@ -35,6 +37,13 @@ class Player(CircleShape):
             self.move((-dt))
         if keys[pygame.K_SPACE]:
             self.shoot()
+        if keys[pygame.K_3]:
+            if self.shotcooldown > 0:
+                return
+            self.shotcooldown = PLAYER_SHOOT_COOLDOWN
+            if self.rainbowmode == False:
+                self.rainbowmode = True
+            else: self.rainbowmode = False
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
