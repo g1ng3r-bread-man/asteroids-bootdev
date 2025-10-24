@@ -7,9 +7,11 @@ from shots import Shot
 import pygame
 
 
+
 def main():
     pygame.init()
     pygame.font.init()
+    global CurrentPlayerShootCooldown, CurrentPlayerShotSpeed
     font = pygame.font.SysFont("Times New Roman", 34)
     textColour = (255, 255, 255)
     currentScore = 0
@@ -27,7 +29,7 @@ def main():
     Player.containers = (updatable, drawable)
     Shot.containers = (drawable, updatable, shots)
     dt = 0
-    print("Starting Asteroids!")
+    print("Starting Asteroids!")   
     print(f"""Screen width: {SCREEN_WIDTH}
 Screen height: {SCREEN_HEIGHT}""")
     playerchar = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
@@ -51,6 +53,9 @@ Screen height: {SCREEN_HEIGHT}""")
                 run = False
             for bullet in shots:
                 if asteroid.collisioncheck(bullet) == True:
+                    if asteroid.isUpgrade == True:
+                        currentScore += 4
+                        playerchar.current_shoot_cooldown = max(0.05, playerchar.current_shoot_cooldown * 0.8)
                     currentScore += 1
                     text = f"Score: {currentScore}"
                     textSurface = font.render(text, False, textColour)

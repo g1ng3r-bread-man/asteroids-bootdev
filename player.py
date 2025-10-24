@@ -2,12 +2,14 @@ from circleshape import CircleShape
 import pygame
 from constants import *
 from shots import Shot
+
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.containers = ()
         self.shotcooldown = 0
+        self.current_shoot_cooldown = PLAYER_SHOOT_COOLDOWN
         #SUPERDOOPERMEGAULTRARAINBOWMODE!!!!!
         self.rainbowmode = False
 
@@ -40,7 +42,7 @@ class Player(CircleShape):
         if keys[pygame.K_3]:
             if self.shotcooldown > 0:
                 return
-            self.shotcooldown = PLAYER_SHOOT_COOLDOWN
+            self.shotcooldown = self.current_shoot_cooldown
             if self.rainbowmode == False:
                 self.rainbowmode = True
             else: self.rainbowmode = False
@@ -52,6 +54,6 @@ class Player(CircleShape):
     def shoot(self):
         if self.shotcooldown > 0:
             return
-        self.shotcooldown = PLAYER_SHOOT_COOLDOWN
+        self.shotcooldown = self.current_shoot_cooldown
         newshot = Shot(self.position, SHOT_RADIUS,)
         newshot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * PLAYER_SHOOT_SPEED

@@ -35,7 +35,7 @@ class AsteroidField(pygame.sprite.Sprite):
     def spawn(self, radius, position, velocity):
         thicknessvalues = range(1, 6)
         colourlist = ("white", "green", "blue", "yellow", "red", "pink", "brown")
-        asteroid = Asteroid(position.x, position.y, radius, random.choice(colourlist), (2 * random.choice(thicknessvalues)))
+        asteroid = Asteroid(position.x, position.y, radius, random.choice(colourlist), (2 * random.choice(thicknessvalues)), random.random() < 0.05)
         asteroid.velocity = velocity
 
     def update(self, dt):

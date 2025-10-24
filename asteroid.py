@@ -4,9 +4,10 @@ import random
 from circleshape import CircleShape
 
 class Asteroid(CircleShape):
-    def __init__(self, x, y, radius, colour, thickness):
+    def __init__(self, x, y, radius, colour, thickness, upgrade):
         super().__init__(x, y, radius)
         self.radius = radius
+        self.isUpgrade = upgrade
         self.shotcooldown = 0
         self.colour = colour
         self.colourlist = ("white", "green", "blue", "yellow", "red", "pink", "brown")
@@ -21,6 +22,8 @@ class Asteroid(CircleShape):
             pygame.draw.circle(screen, random.choice(self.colourlist), self.position, self.radius, self.thickness)
         elif self.diffcolours == True:
             pygame.draw.circle(screen, self.colour, self.position, self.radius, self.thickness)
+        elif self.isUpgrade == True:
+            pygame.draw.circle(screen, random.choice(self.colourlist), self.position, self.radius, 20)
         else: pygame.draw.circle(screen, "white", self.position, self.radius, self.thickness)
 
     def update(self, dt):
@@ -53,9 +56,9 @@ class Asteroid(CircleShape):
             vector2 = self.velocity.rotate(-midangle)
             newradius = self.radius - ASTEROID_MIN_RADIUS
 
-            asteroid1 = Asteroid(self.position.x, self.position.y, newradius, self.colour, self.thickness)
+            asteroid1 = Asteroid(self.position.x, self.position.y, newradius, self.colour, self.thickness, 0)
             asteroid1.velocity = vector1 * 1.2
 
-            asteroid2 = Asteroid(self.position.x, self.position.y, newradius, self.colour, self.thickness)
+            asteroid2 = Asteroid(self.position.x, self.position.y, newradius, self.colour, self.thickness, 0)
             asteroid2.velocity = vector2 * 1.2
 
