@@ -8,7 +8,15 @@ import pygame
 
 
 def main():
-    pygame.init
+    pygame.init()
+    pygame.font.init()
+    font = pygame.font.SysFont("Times New Roman", 34)
+    textColour = (255, 255, 255)
+    currentScore = 0
+    text = "Score: 0"
+    textSurface = font.render(text, False, textColour)
+    text_rect = textSurface.get_rect()
+    text_rect.center = (100, 50)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -43,9 +51,12 @@ Screen height: {SCREEN_HEIGHT}""")
                 run = False
             for bullet in shots:
                 if asteroid.collisioncheck(bullet) == True:
+                    currentScore += 1
+                    text = f"Score: {currentScore}"
+                    textSurface = font.render(text, False, textColour)
                     asteroid.split()
                     bullet.kill()
-                
+        screen.blit(textSurface, text_rect)
         for drawble in drawable:
             drawble.draw(screen)
         pygame.display.flip()
@@ -56,14 +67,3 @@ Screen height: {SCREEN_HEIGHT}""")
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
