@@ -6,7 +6,7 @@ from player import *
 from shots import Shot
 import pygame
 
-def render_text(text="null", x=150, y=100, colour=(255,255,255), fontstr="Times New Roman", fontsize=34):
+def render_text(text="null", x=150, y=100, fontsize=34, colour=(255,255,255), fontstr="Times New Roman"):
     font = pygame.font.SysFont(fontstr, fontsize)
     textSurface = font.render(text, False, colour)
     textRect = textSurface.get_rect()
@@ -18,7 +18,8 @@ def main():
     pygame.font.init()
     global CurrentPlayerShootCooldown, CurrentPlayerShotSpeed
     currentScore = 0
-    scoreSurface, scoreRect = render_text("Score: 0", 50, 100)
+    scoreSurface, scoreRect = render_text("Score: 0", 65, 30)
+    FrameSurf, FrameRect = render_text("FPS: 0", 50, 70, 25)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -42,11 +43,7 @@ Screen height: {SCREEN_HEIGHT}""")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        if playerchar.rainbowmode == True:
-            screen.fill(random.choice(colourlist))
-        else:
-            screen.fill("black")
-        updatable.update(dt)
+        FrameSurf, FrameRect = render_text(f"FPS: {int(dt * 1000)}", 50, 70, 25)
         for asteroid in asteroids:
             if asteroid.collisioncheck(playerchar) == True:
                 print("Game over!")
@@ -57,10 +54,18 @@ Screen height: {SCREEN_HEIGHT}""")
                         currentScore += 4
                         playerchar.current_shoot_cooldown = max(0.05, playerchar.current_shoot_cooldown * 0.8)
                     currentScore += 1
-                    scoreSurface, scoreRect = render_text(f"Score: {currentScore}", 150, 100)
+                    scoreSurface, scoreRect = render_text(f"Score: {currentScore}", 65, 30)
                     asteroid.split()
                     bullet.kill()
+
+        if playerchar.rainbowmode == True:
+            screen.fill(random.choice(colourlist))
+        else:
+            screen.fill("black")
         screen.blit(scoreSurface, scoreRect)
+        screen.blit(FrameSurf, FrameRect)
+        updatable.update(dt)
+
         for drawble in drawable:
             drawble.draw(screen)
         pygame.display.flip()
