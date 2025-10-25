@@ -6,19 +6,19 @@ from player import *
 from shots import Shot
 import pygame
 
-
+def render_text(text="null", x=150, y=100, colour=(255,255,255), fontstr="Times New Roman", fontsize=34):
+    font = pygame.font.SysFont(fontstr, fontsize)
+    textSurface = font.render(text, False, colour)
+    textRect = textSurface.get_rect()
+    textRect.center = (x,y)
+    return (textSurface, textRect)
 
 def main():
     pygame.init()
     pygame.font.init()
     global CurrentPlayerShootCooldown, CurrentPlayerShotSpeed
-    font = pygame.font.SysFont("Times New Roman", 34)
-    textColour = (255, 255, 255)
     currentScore = 0
-    text = "Score: 0"
-    textSurface = font.render(text, False, textColour)
-    text_rect = textSurface.get_rect()
-    text_rect.center = (100, 50)
+    scoreSurface, scoreRect = render_text("Score: 0", 50, 100)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -57,15 +57,13 @@ Screen height: {SCREEN_HEIGHT}""")
                         currentScore += 4
                         playerchar.current_shoot_cooldown = max(0.05, playerchar.current_shoot_cooldown * 0.8)
                     currentScore += 1
-                    text = f"Score: {currentScore}"
-                    textSurface = font.render(text, False, textColour)
+                    scoreSurface, scoreRect = render_text(f"Score: {currentScore}", 150, 100)
                     asteroid.split()
                     bullet.kill()
-        screen.blit(textSurface, text_rect)
+        screen.blit(scoreSurface, scoreRect)
         for drawble in drawable:
             drawble.draw(screen)
         pygame.display.flip()
-        pygame.time.Clock().tick(60)
         frame = pygame.time.Clock().tick(60)
         dt = frame / 1000
 
