@@ -26,7 +26,7 @@ class Player(CircleShape):
         self.rotation += (PLAYER_TURN_SPEED * dt)
 
     def draw(self, screen):
-        SCREEN.blit(pygame.image.load("asteroidicon.ico"), self.position)
+        pygame.draw.polygon(screen, "white", self.triangle(), 2)
 
     def update(self, dt):
         self.shotcooldown -= dt
