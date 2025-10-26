@@ -25,10 +25,13 @@ class Player(CircleShape):
     def rotate(self, dt):
         self.rotation += (PLAYER_TURN_SPEED * dt)
 
+    def draw(self, screen):
+        pygame.draw.polygon(screen, "white", self.triangle(), 2)
+
     def update(self, dt):
         self.shotcooldown -= dt
         keys = pygame.key.get_pressed()
-
+    
         if keys[pygame.K_a]:
             self.rotate((-dt))
         if keys[pygame.K_d]:
@@ -42,7 +45,7 @@ class Player(CircleShape):
         if keys[pygame.K_3]:
             if self.shotcooldown > 0:
                 return
-            self.shotcooldown = self.current_shoot_cooldown
+            self.shotcooldown = PLAYER_SHOOT_COOLDOWN
             if self.rainbowmode == False:
                 self.rainbowmode = True
             else: self.rainbowmode = False
