@@ -7,6 +7,8 @@ from shots import Shot
 import pygame
 from turret import Turret
 
+# this is the real main
+
 def render_text(text="null", x=150, y=100, fontsize=34, colour=(255,255,255), fontstr="Times New Roman"):
     font = pygame.font.SysFont(fontstr, fontsize)
     textSurface = font.render(text, False, colour)
