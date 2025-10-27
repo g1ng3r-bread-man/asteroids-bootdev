@@ -35,7 +35,6 @@ def main():
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
     turrets = pygame.sprite.Group()
-    frameClock = pygame.time.Clock()
     colourlist = ("white", "green", "blue", "yellow", "red", "pink", "brown")
     AsteroidField.containers = (updatable)
     Asteroid.containers = (drawable, asteroids, updatable)
@@ -43,6 +42,7 @@ def main():
     Shot.containers = (drawable, updatable, shots)
     Turret.containers = (drawable, updatable, turrets)
 
+    frameClock = pygame.time.Clock()
     dt = 0
     print("Starting Asteroids!")   
     print(f"""Screen width: {SCREEN_WIDTH}
@@ -67,17 +67,19 @@ Screen height: {SCREEN_HEIGHT}""")
             if available_turrets >= 1 and turretDelay >= 0.5:
                 turretDelay = 0
                 available_turrets -= 1
-                turret = Turret(playerchar.position.x, playerchar.position.y, asteroids)
+                turret = Turret(playerchar.position.x, playerchar.position.y, asteroids, "machinegun")
                 turrets.add(turret)
                 updatable.add(turret)
                 drawable.add(turret)
         if currentScore >= next_turret_score:
             available_turrets += 1
             next_turret_score += 30
+
         for asteroid in asteroids:
             if asteroid.collisioncheck(playerchar) == True:
                 print("Game over!")
                 run = False
+
             for bullet in shots:
                 if asteroid.collisioncheck(bullet) == True:
                     if asteroid.isUpgrade == True:
@@ -86,12 +88,15 @@ Screen height: {SCREEN_HEIGHT}""")
                         playerchar.current_shoot_cooldown = max(0.05, playerchar.current_shoot_cooldown * 0.8)
                     currentScore += 1
                     asteroid.split()
-                    bullet.kill()
+                    bullet.piercing -= 1
+                    if bullet.piercing <= 0:
+                        bullet.kill()
 
         if playerchar.rainbowmode == True:
             SCREEN.fill(random.choice(colourlist))
         else:
             SCREEN.fill("black")
+
         SCREEN.blit(scoreSurface, scoreRect)
         SCREEN.blit(FrameSurf, FrameRect)
         SCREEN.blit(TurretSurf, TurretRect)
@@ -100,9 +105,10 @@ Screen height: {SCREEN_HEIGHT}""")
 
         for drawble in drawable:
             drawble.draw(SCREEN)
+
         pygame.display.flip()
-        frameClock.tick(120)
-        frame = frameClock.tick(120)
+        frameClock.tick(60)
+        frame = frameClock.tick(60)
         dt = frame / 1000
 
 

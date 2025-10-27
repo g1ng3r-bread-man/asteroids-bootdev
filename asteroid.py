@@ -3,6 +3,7 @@ import pygame
 import random
 from circleshape import CircleShape
 
+
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius, colour, thickness, upgrade):
         super().__init__(x, y, radius)
@@ -29,6 +30,12 @@ class Asteroid(CircleShape):
     def update(self, dt):
         self.shotcooldown -= dt
         self.position += (self.velocity * dt)
+        buffer = ASTEROID_MAX_RADIUS + 2
+        if (self.position.x < -buffer or 
+        self.position.x > SCREEN_WIDTH + buffer or 
+        self.position.y < -buffer or 
+        self.position.y > SCREEN_HEIGHT + buffer):
+            self.kill()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_1]:
             if self.shotcooldown > 0:
