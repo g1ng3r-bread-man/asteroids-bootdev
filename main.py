@@ -7,7 +7,7 @@ from shots import Shot
 import pygame
 from turret import Turret
 
-# this is the real main
+# main branch
 
 def render_text(text="null", x=150, y=100, fontsize=34, colour=(255,255,255), fontstr="Times New Roman"):
     font = pygame.font.SysFont(fontstr, fontsize)
@@ -23,11 +23,13 @@ def main():
     next_turret_score = 0
     available_turrets = 0
     turretDelay = 0
+    ShootSpeed = 1
     pygame.display.set_caption('Asteroids: "Better than Space Cursors!"')
     pygame.display.set_icon(pygame.image.load("asteroidicon.ico"))
     scoreSurface, scoreRect = render_text("Score: 0", 65, 30)
     FrameSurf, FrameRect = render_text("FPS: 0", 50, 70, 25)
     TurretSurf, TurretRect = render_text("Turrets: 0", 65, 110)
+    MultSurf, MultRect = render_text("Shoot speed: 1x", 65, 150)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -59,6 +61,7 @@ Screen height: {SCREEN_HEIGHT}""")
         FrameSurf, FrameRect = render_text(f"FPS: {int(frameClock.get_fps())}", 50, 70, 25)
         scoreSurface, scoreRect = render_text(f"Score: {currentScore}", 65, 30)
         TurretSurf, TurretRect = render_text(f"Turrets: {available_turrets}", 70, 110)
+        MultSurf, MultRect = render_text(f"Shoot speed: {ShootSpeed}x", 65, 150)
         turretDelay += dt
         if keys[pygame.K_e]:
             if available_turrets >= 1 and turretDelay >= 0.5:
@@ -79,6 +82,7 @@ Screen height: {SCREEN_HEIGHT}""")
                 if asteroid.collisioncheck(bullet) == True:
                     if asteroid.isUpgrade == True:
                         currentScore += 4
+                        ShootSpeed = round(ShootSpeed * 1.2, 2)
                         playerchar.current_shoot_cooldown = max(0.05, playerchar.current_shoot_cooldown * 0.8)
                     currentScore += 1
                     asteroid.split()
@@ -91,13 +95,14 @@ Screen height: {SCREEN_HEIGHT}""")
         SCREEN.blit(scoreSurface, scoreRect)
         SCREEN.blit(FrameSurf, FrameRect)
         SCREEN.blit(TurretSurf, TurretRect)
+        SCREEN.blit(MultSurf, MultRect)
         updatable.update(dt)
 
         for drawble in drawable:
             drawble.draw(SCREEN)
         pygame.display.flip()
-        frameClock.tick(60)
-        frame = frameClock.tick(60)
+        frameClock.tick(120)
+        frame = frameClock.tick(120)
         dt = frame / 1000
 
 

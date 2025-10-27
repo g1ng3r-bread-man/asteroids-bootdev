@@ -51,7 +51,7 @@ class Turret(CircleShape):
         turn = max(-max_turn, min(max_turn, diff))
         self.rotation += turn
 
-        if abs(diff) < 60 and self.shotcooldown <= 0:
+        if abs(diff) < 6 and self.shotcooldown <= 0:
             self.shoot()
 
     def rotate(self, dt):
