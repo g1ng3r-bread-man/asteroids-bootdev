@@ -5,7 +5,7 @@ from circleshape import CircleShape
 from shots import Shot
 
 class Turret(CircleShape):
-    def __init__(self, x, y, asteroids, type):
+    def __init__(self, x, y, asteroids, type=None):
         super().__init__(x, y, TURRET_RADIUS)
         self.shotcooldown = 0
         self.reload = 0
@@ -26,7 +26,7 @@ class Turret(CircleShape):
     def shoot(self):
         if self.shotcooldown > 0:
             return
-        if self.type == "normal":
+        if self.type == "normal" or self.type is None:
             self.shotcooldown = NORM_TURRET_SHOT_COOLDOWN
             newshot = Shot(self.position, SHOT_RADIUS,)
             newshot.velocity = pygame.Vector2(0,-1).rotate(self.rotation) * TURRET_SHOOT_SPEED
@@ -44,7 +44,7 @@ class Turret(CircleShape):
             if self.reload > 0:
                 return
             if self.burst > 0:
-                self.shotcooldown = max(MACHINE_GUN_MIN_COOLDOWN, MACHINE_GUN_SHOT_COOLDOWN * ((self.burst / 8) / (MACHINE_GUN_BURST_SIZE / 8 )))
+                self.shotcooldown = max(MACHINE_GUN_MIN_COOLDOWN, MACHINE_GUN_SHOT_COOLDOWN - MACHINE_GUN_MIN_COOLDOWN / 10)
                 newshot = Shot(self.position, SHOT_RADIUS)
                 newshot.velocity = pygame.Vector2(random.choice([x / 10 for x in range(-4, 5)]), -1).rotate(self.rotation) * TURRET_SHOOT_SPEED
                 self.burst -= 1

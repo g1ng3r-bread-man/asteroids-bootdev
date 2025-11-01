@@ -16,20 +16,40 @@ def render_text(text="null", x=150, y=100, fontsize=34, colour=(255,255,255), fo
     textRect.center = (x,y)
     return (textSurface, textRect)
 
+def render_stats(if_stats_on, frameClock, available_turrets, ShootSpeed, asteroids, shots):
+    if if_stats_on is False:
+        statsSurf, statsRect = render_text("Press Z for stats", 120, 70)
+
+        SCREEN.blit(statsSurf, statsRect)
+        return
+    FrameSurf, FrameRect = render_text(f"FPS: {int(frameClock.get_fps())}", 50, 70, 25)
+    TurretSurf, TurretRect = render_text(f"Turrets: {available_turrets}", 70, 110)
+    MultSurf, MultRect = render_text(f"Shoot speed: {ShootSpeed}x", 110, 150)
+    AstNumSurf, AstNumRect = render_text(f"Shot count: {len(shots)}", 100, 190)
+    ShotNumSurf, ShotNumRect = render_text(f"Asteroid count: {len(asteroids)}", 125, 230)
+    TurretKeySurf, TurretKeyRect = render_text("""Keybinds for turrets: Normal turret: E, Shotgun turret: R, Sniper turret: T, Machinegun turret: Y""", 600, 700, 24)
+
+    SCREEN.blit(TurretKeySurf, TurretKeyRect)
+    SCREEN.blit(ShotNumSurf, ShotNumRect)
+    SCREEN.blit(AstNumSurf, AstNumRect)
+    SCREEN.blit(FrameSurf, FrameRect)
+    SCREEN.blit(TurretSurf, TurretRect)
+    SCREEN.blit(MultSurf, MultRect)
+    return
+
+
 def main():
     pygame.init()
     pygame.font.init()
     currentScore = 0
+    if_stats_on = False
     next_turret_score = 0
+    statsCooldown = 0
     available_turrets = 0
     turretDelay = 0
     ShootSpeed = 1
     pygame.display.set_caption('Asteroids: "Better than Space Cursors!"')
     pygame.display.set_icon(pygame.image.load("asteroidicon.ico"))
-    scoreSurface, scoreRect = render_text("Score: 0", 65, 30)
-    FrameSurf, FrameRect = render_text("FPS: 0", 50, 70, 25)
-    TurretSurf, TurretRect = render_text("Turrets: 0", 65, 110)
-    MultSurf, MultRect = render_text("Shoot speed: 1x", 65, 150)
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -57,23 +77,34 @@ Screen height: {SCREEN_HEIGHT}""")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        keys = pygame.key.get_pressed()
-        FrameSurf, FrameRect = render_text(f"FPS: {int(frameClock.get_fps())}", 50, 70, 25)
         scoreSurface, scoreRect = render_text(f"Score: {currentScore}", 65, 30)
-        TurretSurf, TurretRect = render_text(f"Turrets: {available_turrets}", 70, 110)
-        MultSurf, MultRect = render_text(f"Shoot speed: {ShootSpeed}x", 65, 150)
+        statsCooldown -= dt
+        keys = pygame.key.get_pressed()
         turretDelay += dt
-        if keys[pygame.K_e]:
+        if keys[pygame.K_e] or keys[pygame.K_r] or keys[pygame.K_t] or keys[pygame.K_y]:
             if available_turrets >= 1 and turretDelay >= 0.5:
                 turretDelay = 0
                 available_turrets -= 1
-                turret = Turret(playerchar.position.x, playerchar.position.y, asteroids, "machinegun")
+                if keys[pygame.K_e]:
+                        turret = Turret(playerchar.position.x, playerchar.position.y, asteroids, "normal")
+                elif keys[pygame.K_r]:
+                        turret = Turret(playerchar.position.x, playerchar.position.y, asteroids, "shotgun")
+                elif keys[pygame.K_t]:
+                        turret = Turret(playerchar.position.x, playerchar.position.y, asteroids, "sniper")
+                elif keys[pygame.K_y]:
+                        turret = Turret(playerchar.position.x, playerchar.position.y, asteroids, "machinegun")
                 turrets.add(turret)
                 updatable.add(turret)
                 drawable.add(turret)
         if currentScore >= next_turret_score:
-            available_turrets += 1
+            available_turrets += 10
             next_turret_score += 30
+
+        if keys[pygame.K_z]:
+            if statsCooldown > 0:
+                continue
+            if_stats_on = not if_stats_on
+            statsCooldown = 3
 
         for asteroid in asteroids:
             if asteroid.collisioncheck(playerchar) == True:
@@ -97,15 +128,13 @@ Screen height: {SCREEN_HEIGHT}""")
         else:
             SCREEN.fill("black")
 
-        SCREEN.blit(scoreSurface, scoreRect)
-        SCREEN.blit(FrameSurf, FrameRect)
-        SCREEN.blit(TurretSurf, TurretRect)
-        SCREEN.blit(MultSurf, MultRect)
+        
         updatable.update(dt)
 
         for drawble in drawable:
             drawble.draw(SCREEN)
-
+        SCREEN.blit(scoreSurface, scoreRect)
+        render_stats(if_stats_on, frameClock, available_turrets, ShootSpeed, asteroids, shots)
         pygame.display.flip()
         frameClock.tick(60)
         frame = frameClock.tick(60)
