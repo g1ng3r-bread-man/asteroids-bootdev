@@ -6,7 +6,7 @@ SCREEN_HEIGHT = 720
 #ASTEROID CONSTANTS
 ASTEROID_MIN_RADIUS = 20
 ASTEROID_KINDS = 3
-ASTEROID_SPAWN_RATE = 0.1  # seconds
+ASTEROID_SPAWN_RATE = 7770.0  # seconds
 ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
 
 #PLAYER CONSTANTS
@@ -33,3 +33,12 @@ MACHINE_GUN_MIN_COOLDOWN = 0.07
 MACHINE_GUN_BURST_SIZE = 40
 MACHINE_GUN_RELOAD = 3
 
+#IMAGE FILES
+ncar = pygame.transform.scale(pygame.image.load("asteroids car/n.png").convert_alpha(), (55,55))
+nwcar = pygame.transform.scale(pygame.image.load("asteroids car/nw.png").convert_alpha(), (55,55))
+wcar = pygame.transform.scale(pygame.image.load("asteroids car/w.png").convert_alpha(), (55,55))
+swcar = pygame.transform.scale(pygame.image.load("asteroids car/sw.png").convert_alpha(), (55,55))
+scar = pygame.transform.scale(pygame.image.load("asteroids car/s.png").convert_alpha(), (55,55))
+secar = pygame.transform.scale(pygame.image.load("asteroids car/se.png").convert_alpha(), (55,55))
+ecar = pygame.transform.scale(pygame.image.load("asteroids car/e.png").convert_alpha(), (55,55))
+necar = pygame.transform.scale(pygame.image.load("asteroids car/ne.png").convert_alpha(), (55,55))

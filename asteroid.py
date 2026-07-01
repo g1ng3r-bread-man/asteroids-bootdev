@@ -17,6 +17,7 @@ class Asteroid(CircleShape):
         self.rainbow = False
         #Different coloured asteroids
         self.diffcolours = False
+        self.homing = False
 
     def draw(self, screen):
         if self.rainbow == True:

@@ -12,7 +12,8 @@ class Player(CircleShape):
         self.current_shoot_cooldown = PLAYER_SHOOT_COOLDOWN
         #SUPERDOOPERMEGAULTRARAINBOWMODE!!!!!
         self.rainbowmode = False
-
+        self.carmode = True
+        self.degreeAngle = (self.rotation+0.001)%360
         # in the player class
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -26,7 +27,30 @@ class Player(CircleShape):
         self.rotation += (PLAYER_TURN_SPEED * dt)
 
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), 2)
+        self.degreeAngle = (self.rotation+0.001)%360
+        if self.carmode:
+            if self.degreeAngle > 157.5 and self.degreeAngle < 202.5:
+                screen.blit(ncar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 112.5 and self.degreeAngle < 157.5:
+                screen.blit(nwcar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 67.5 and self.degreeAngle < 112.5:
+                screen.blit(wcar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 22.5 and self.degreeAngle < 67.5:
+                screen.blit(swcar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle >= 0 and self.degreeAngle < 22.5:
+                screen.blit(scar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 337.5 and self.degreeAngle <= 360:
+                screen.blit(scar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 292.5 and self.degreeAngle < 337.5:
+                screen.blit(secar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 247.5 and self.degreeAngle < 292.5:
+                screen.blit(ecar, (self.position.x-24, self.position.y-24))
+            if self.degreeAngle > 202.5 and self.degreeAngle < 247.5:
+                screen.blit(necar, (self.position.x-24, self.position.y-24))
+        else:    
+            pygame.draw.polygon(screen, "white", self.triangle(), 2)
+
+        
 
     def update(self, dt):
         self.shotcooldown -= dt
