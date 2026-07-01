@@ -95,7 +95,7 @@ Screen height: {SCREEN_HEIGHT}""")
         keys = pygame.key.get_pressed()
         turretDelay += dt
         if keys[pygame.K_e] or keys[pygame.K_r] or keys[pygame.K_t] or keys[pygame.K_y]:
-            if available_turrets >= 1 and turretDelay >= 0.0:
+            if available_turrets >= 1 and turretDelay >= 0.4:
                 turretDelay = 0
                 available_turrets -= 1
                 if keys[pygame.K_e]:
@@ -135,6 +135,8 @@ Screen height: {SCREEN_HEIGHT}""")
                     bullet.piercing -= 1
                     if bullet.piercing <= 0:
                         bullet.kill()
+            if asteroid.homing:
+                 asteroid.home
 
         if playerchar.rainbowmode == True:
             SCREEN.fill(random.choice(colourlist))
@@ -142,7 +144,7 @@ Screen height: {SCREEN_HEIGHT}""")
             SCREEN.fill("black")
 
         
-        updatable.update(dt)
+        updatable.update(dt, playerchar)
 
         for drawble in drawable:
             drawble.draw(SCREEN)

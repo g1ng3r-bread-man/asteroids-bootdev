@@ -70,7 +70,7 @@ class Turret(CircleShape):
             return None
         
 
-    def update(self, dt):
+    def update(self, dt, playerchar):
         self.shotcooldown = max(0, self.shotcooldown - dt)
         if self.reload > 0:
             self.reload = max(0, self.reload - dt)

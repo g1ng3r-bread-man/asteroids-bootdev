@@ -5,7 +5,7 @@ from circleshape import CircleShape
 
 
 class Asteroid(CircleShape):
-    def __init__(self, x, y, radius, colour, thickness, upgrade):
+    def __init__(self, x, y, radius, colour, thickness, upgrade, speed=0):
         super().__init__(x, y, radius)
         self.radius = radius
         self.isUpgrade = upgrade
@@ -17,9 +17,15 @@ class Asteroid(CircleShape):
         self.rainbow = False
         #Different coloured asteroids
         self.diffcolours = False
-        self.homing = False
+        self.homing = True
+        self.speed = speed
+        self.rotation = 0
+        self.nextbot = random.choice([obunga, klein, sanic, gargitron, armstrong])
 
     def draw(self, screen):
+        if self.homing:
+            screen.blit(self.nextbot, (self.position.x-24, self.position.y-24))
+            return
         if self.rainbow == True:
             pygame.draw.circle(screen, random.choice(self.colourlist), self.position, self.radius, self.thickness)
         elif self.diffcolours == True:
@@ -28,9 +34,12 @@ class Asteroid(CircleShape):
             pygame.draw.circle(screen, random.choice(self.colourlist), self.position, self.radius, 20)
         else: pygame.draw.circle(screen, "white", self.position, self.radius, self.thickness)
 
-    def update(self, dt):
+    def update(self, dt, target):
         self.shotcooldown -= dt
-        self.position += (self.velocity * dt)
+        if self.homing:
+            self.position += self.home(300, dt, target)
+        else:
+            self.position += (self.velocity * dt)
         buffer = ASTEROID_MAX_RADIUS + 2
         if (self.position.x < -buffer or 
         self.position.x > SCREEN_WIDTH + buffer or 
@@ -70,3 +79,17 @@ class Asteroid(CircleShape):
             asteroid2 = Asteroid(self.position.x, self.position.y, newradius, self.colour, self.thickness, 0)
             asteroid2.velocity = vector2 * 1.2
 
+    def home(self, turnSpeed, dt, target=None):
+        if target is None:
+            return pygame.Vector2(0,0)
+        to_targ = target.position - self.position
+        if to_targ.length() == 0:
+            return pygame.Vector2(0,0)
+        desiredRot = pygame.Vector2(0,-1).angle_to(to_targ)
+        diff = ((desiredRot - self.rotation + 180) % 360) - 180
+        max_turn = turnSpeed * dt
+        turn = max(-max_turn, min(max_turn, diff))
+        self.rotation += turn
+        direction = pygame.Vector2(0, -1).rotate(self.rotation)
+        self.velocity = direction * self.speed
+        return self.velocity * dt

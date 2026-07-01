@@ -15,6 +15,7 @@ class Player(CircleShape):
         self.carmode = True
         self.degreeAngle = (self.rotation+0.001)%360
         # in the player class
+
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
@@ -47,12 +48,14 @@ class Player(CircleShape):
                 screen.blit(ecar, (self.position.x-24, self.position.y-24))
             if self.degreeAngle > 202.5 and self.degreeAngle < 247.5:
                 screen.blit(necar, (self.position.x-24, self.position.y-24))
+
+            screen.blit(pygame.transform.rotate(cannon, -self.degreeAngle), (self.position.x-24, self.position.y-24))
         else:    
             pygame.draw.polygon(screen, "white", self.triangle(), 2)
 
         
 
-    def update(self, dt):
+    def update(self, dt, playerchar):
         self.shotcooldown -= dt
         keys = pygame.key.get_pressed()
     
