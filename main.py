@@ -64,7 +64,7 @@ def main():
     turrets = pygame.sprite.Group()
     colourlist = ("white", "green", "blue", "yellow", "red", "pink", "brown")
     AsteroidField.containers = (updatable)
-    Asteroid.containers = (drawable, asteroids, updatable)
+    Asteroid.containers = (drawable, asteroids)
     Player.containers = (updatable, drawable)
     Shot.containers = (drawable, updatable, shots)
     Turret.containers = (drawable, updatable, turrets)
@@ -144,7 +144,8 @@ Screen height: {SCREEN_HEIGHT}""")
             SCREEN.fill("black")
 
         
-        updatable.update(dt, playerchar)
+        updatable.update(dt)
+        asteroids.update(dt, playerchar)
 
         for drawble in drawable:
             drawble.draw(SCREEN)

@@ -55,7 +55,7 @@ class Player(CircleShape):
 
         
 
-    def update(self, dt, playerchar):
+    def update(self, dt):
         self.shotcooldown -= dt
         keys = pygame.key.get_pressed()
     
