@@ -9,6 +9,12 @@ from turret import Turret
 
 # main branch
 
+def render_cool_text(tuple, rot):
+    surf = pygame.transform.rotate(tuple[0], rot)
+    return (surf, tuple[1])
+     
+
+
 def render_text(text="null", x=150, y=100, fontsize=34, colour=(255,255,255), fontstr="Times New Roman"):
     font = pygame.font.SysFont(fontstr, fontsize)
     textSurface = font.render(text, False, colour)
@@ -48,6 +54,7 @@ def main():
     available_turrets = 0
     turretDelay = 0
     ShootSpeed = 1
+    score_rot = 0
     pygame.display.set_caption('Asteroids: "Better than Space Cursors!"')
     pygame.display.set_icon(pygame.image.load("asteroidicon.ico"))
     updatable = pygame.sprite.Group()
@@ -77,12 +84,18 @@ Screen height: {SCREEN_HEIGHT}""")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        scoreSurface, scoreRect = render_text(f"Score: {currentScore}", 65, 30)
+        if score_rot <= 10:
+            scoreSurface, scoreRect = render_cool_text(render_text(f"Score: {currentScore}", 65, 30), score_rot)
+            score_rot -= 1
+        
+        elif score_rot >= 350: 
+            scoreSurface, scoreRect = render_cool_text(render_text(f"Score: {currentScore}", 65, 30), score_rot)
+            score_rot -= 1
         statsCooldown -= dt
         keys = pygame.key.get_pressed()
         turretDelay += dt
         if keys[pygame.K_e] or keys[pygame.K_r] or keys[pygame.K_t] or keys[pygame.K_y]:
-            if available_turrets >= 1 and turretDelay >= 0.5:
+            if available_turrets >= 1 and turretDelay >= 0.0:
                 turretDelay = 0
                 available_turrets -= 1
                 if keys[pygame.K_e]:
@@ -116,7 +129,7 @@ Screen height: {SCREEN_HEIGHT}""")
                     if asteroid.isUpgrade == True:
                         currentScore += 4
                         ShootSpeed = round(ShootSpeed * 1.2, 2)
-                        playerchar.current_shoot_cooldown = max(0.05, playerchar.current_shoot_cooldown * 0.8)
+                        playerchar.current_shoot_cooldown = max(0.00, playerchar.current_shoot_cooldown * 0.8)
                     currentScore += 1
                     asteroid.split()
                     bullet.piercing -= 1

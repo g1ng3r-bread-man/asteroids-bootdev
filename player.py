@@ -42,6 +42,8 @@ class Player(CircleShape):
             self.move((-dt))
         if keys[pygame.K_SPACE]:
             self.shoot()
+        if keys[pygame.K_q]:
+            self.shoot(True)
         if keys[pygame.K_3]:
             if self.shotcooldown > 0:
                 return
@@ -54,9 +56,14 @@ class Player(CircleShape):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
-    def shoot(self):
+    def shoot(self, bigshot=False):
         if self.shotcooldown > 0:
             return
-        self.shotcooldown = self.current_shoot_cooldown
-        newshot = Shot(self.position, SHOT_RADIUS,)
-        newshot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        if not bigshot:
+            self.shotcooldown = self.current_shoot_cooldown
+            newshot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
+            newshot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        elif bigshot:
+            self.shotcooldown = self.current_shoot_cooldown
+            newshot = Shot(self.position.x, self.position.y, 30, 200)
+            newshot.velocity = pygame.Vector2(0,0.4).rotate(self.rotation) * PLAYER_SHOOT_SPEED

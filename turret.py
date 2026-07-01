@@ -55,7 +55,7 @@ class Turret(CircleShape):
 
         elif self.type == "sniper":
             self.shotcooldown = SNIPER_TURRET_SHOT_COOLDOWN
-            newshot = Shot(self.position, SHOT_RADIUS, 2)
+            newshot = Shot(self.position, 40, 3)
             newshot.velocity = pygame.Vector2(0, -1).rotate(self.rotation) * SNIPER_TURRET_SHOOT_SPEED
 
 
